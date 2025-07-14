@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:healsphere/app/core/themes/app_theme.dart';
+import 'package:healsphere/app/modules/onboarding/views/widgets/indicator_widget.dart';
 import '../controllers/onboarding_controller.dart';
 
 class OnboardingView extends GetView<OnboardingController> {
@@ -7,110 +9,113 @@ class OnboardingView extends GetView<OnboardingController> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = [
-      _OnboardingPage(
-        image: 'assets/images/onboarding1.png',
-        title: 'Book Easily',
-        subtitle: 'Search by specialty, location, or availability.\nSkip the wait. Choose a time that works for you.',
-      ),
-      _OnboardingPage(
-        image: 'assets/images/onboarding2.png',
-        title: 'Secure Health Records',
-        subtitle: 'Search by specialty, location, or availability.\nSkip the wait. Choose a time that works for you.',
-      ),
-      _OnboardingPage(
-        image: 'assets/images/onboarding3.png',
-        title: 'Care That Follows You',
-        subtitle: 'Get timely alerts for appointments, medications, and follow-ups. Never miss what matters.',
-      ),
-    ];
-
     return Scaffold(
-      
       body: SafeArea(
-        child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SizedBox(height: 40),
-            Expanded(
-              child: PageView.builder(
-                controller: controller.pageController,
-                itemCount: pages.length,
-                onPageChanged: controller.onPageChanged,
-                itemBuilder: (_, i) => pages[i],
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Center(
+            child: SizedBox(
+              // height: 600,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: PageView.builder(
+                      controller: controller.pageController,
+                      itemCount: controller.pages.length,
+                      onPageChanged: controller.onPageChanged,
+                      itemBuilder: (_, i) => controller.pages[i],
+                    ),
+                  ),
+                  Obx(
+                    () => Indicator(
+                      current: controller.pageIndex.value,
+                      count: controller.pages.length,
+                    ),
+                  ),
+                  // const SizedBox(height: 16),
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.arrow_back, color: AppColors.white),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                          ),
+                          onPressed: controller.pageIndex.value == 0
+                              ? null
+                              : controller.prevPage,
+                        ),
+                        const SizedBox(width: 16),
+                        controller.pageIndex.value < 2
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.arrow_forward,
+                                  color: AppColors.white,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                ),
+                                onPressed: controller.nextPage,
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  Get.offNamed('/home');
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                      top: 2,
+                                      bottom: 2,
+                                      right: 2.0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Get Started',
+                                          style: TextStyle(
+                                            color: AppColors.white,
+                                          ),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Container(
+                                          height: 38,
+                                          width: 38,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              40,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.arrow_forward,
+                                            color: AppColors.primary,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            Obx(() => _Indicator(current: controller.pageIndex.value, count: pages.length)),
-            const SizedBox(height: 16),
-            Obx(() => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: Colors.blue),
-                  onPressed: controller.pageIndex.value == 0 ? null : controller.prevPage,
-                ),
-                const SizedBox(width: 16),
-                controller.pageIndex.value < 2
-                    ? IconButton(
-                        icon: Icon(Icons.arrow_forward_ios, color: Colors.blue),
-                        onPressed: controller.nextPage,
-                      )
-                    : ElevatedButton(
-                        onPressed: () {
-                          // Navigate to next screen
-                        },
-                        child: const Text('Get Start'),
-                      ),
-              ],
-            )),
-            const SizedBox(height: 32),
-          ],
+          ),
         ),
       ),
-    );
-  }
-}
-
-class _OnboardingPage extends StatelessWidget {
-  final String image, title, subtitle;
-  const _OnboardingPage({required this.image, required this.title, required this.subtitle});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Column(
-        children: [
-          const SizedBox(height: 32),
-           Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blue)),
-          const SizedBox(height: 16),
-          Text(subtitle, textAlign: TextAlign.center, style: TextStyle(fontSize: 16, color: Colors.black87)),
-          const SizedBox(height: 24),
-          Image.asset(image, width: double.infinity,),
-          
-         
-        ],
-      ),
-    );
-  }
-}
-
-class _Indicator extends StatelessWidget {
-  final int current, count;
-  const _Indicator({required this.current, required this.count});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(count, (i) => Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        width: 10,
-        height: 10,
-        decoration: BoxDecoration(
-          color: i == current ? Colors.blue : Colors.grey[300],
-          shape: BoxShape.circle,
-        ),
-      )),
     );
   }
 }
