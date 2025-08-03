@@ -78,9 +78,11 @@ class ReportController extends GetxController {
       filteredReports.assignAll(reports);
     } else {
       filteredReports.assignAll(
-        reports.where((report) =>
-            report.testName.toLowerCase().contains(query.toLowerCase()) ||
-            report.reportType.toLowerCase().contains(query.toLowerCase())),
+        reports.where(
+          (report) =>
+              report.testName.toLowerCase().contains(query.toLowerCase()) ||
+              report.reportType.toLowerCase().contains(query.toLowerCase()),
+        ),
       );
     }
   }

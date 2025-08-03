@@ -92,9 +92,11 @@ class LabTestsController extends GetxController {
       filteredLabTests.assignAll(labTests);
     } else {
       filteredLabTests.assignAll(
-        labTests.where((test) =>
-            test.name.toLowerCase().contains(query.toLowerCase()) ||
-            test.description.toLowerCase().contains(query.toLowerCase())),
+        labTests.where(
+          (test) =>
+              test.name.toLowerCase().contains(query.toLowerCase()) ||
+              test.description.toLowerCase().contains(query.toLowerCase()),
+        ),
       );
     }
   }

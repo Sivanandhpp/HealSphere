@@ -45,7 +45,10 @@ class PackagesController extends GetxController {
     packages.assignAll([
       HealthPackage(
         name: 'Essential Health Checkup',
-        tests: ['CBC, Lipid Profile, Blood Sugar', 'Liver & Kidney Function Tests'],
+        tests: [
+          'CBC, Lipid Profile, Blood Sugar',
+          'Liver & Kidney Function Tests',
+        ],
         additionalInfo: '',
         price: 999,
         resultTime: 'Result In 24 hrs',
@@ -92,9 +95,13 @@ class PackagesController extends GetxController {
       filteredPackages.assignAll(packages);
     } else {
       filteredPackages.assignAll(
-        packages.where((package) =>
-            package.name.toLowerCase().contains(query.toLowerCase()) ||
-            package.tests.any((test) => test.toLowerCase().contains(query.toLowerCase()))),
+        packages.where(
+          (package) =>
+              package.name.toLowerCase().contains(query.toLowerCase()) ||
+              package.tests.any(
+                (test) => test.toLowerCase().contains(query.toLowerCase()),
+              ),
+        ),
       );
     }
   }

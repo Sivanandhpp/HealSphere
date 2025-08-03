@@ -5,7 +5,7 @@ import '../controllers/packages_controller.dart';
 
 class PackagesView extends GetView<PackagesController> {
   const PackagesView({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,10 +19,7 @@ class PackagesView extends GetView<PackagesController> {
         ),
         title: const Text(
           'Packages',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -57,197 +54,214 @@ class PackagesView extends GetView<PackagesController> {
               ),
             ),
           ),
-          
+
           // Packages List
           Expanded(
-            child: Obx(() => ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: controller.filteredPackages.length,
-              itemBuilder: (context, index) {
-                final package = controller.filteredPackages[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Package Icon
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10),
+            child: Obx(
+              () => ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: controller.filteredPackages.length,
+                itemBuilder: (context, index) {
+                  final package = controller.filteredPackages[index];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Package Icon
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                package.name.contains('Women')
+                                    ? Icons.female
+                                    : Icons.assignment,
+                                color: AppColors.primary,
+                                size: 28,
+                              ),
                             ),
-                            child: Icon(
-                              package.name.contains('Women') 
-                                  ? Icons.female 
-                                  : Icons.assignment,
-                              color: AppColors.primary,
-                              size: 28,
+                            const SizedBox(width: 16),
+
+                            // Package Info
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    package.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+
+                                  // Tests List
+                                  ...package.tests
+                                      .map(
+                                        (test) => Padding(
+                                          padding: const EdgeInsets.only(
+                                            bottom: 4,
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: 6,
+                                                height: 6,
+                                                margin: const EdgeInsets.only(
+                                                  top: 6,
+                                                  right: 8,
+                                                ),
+                                                decoration: const BoxDecoration(
+                                                  color: AppColors.primary,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  test,
+                                                  style: const TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+
+                                  // Additional Info
+                                  if (package.additionalInfo.isNotEmpty) ...[
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 6,
+                                          height: 6,
+                                          margin: const EdgeInsets.only(
+                                            top: 6,
+                                            right: 8,
+                                          ),
+                                          decoration: const BoxDecoration(
+                                            color: AppColors.primary,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            package.additionalInfo,
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 16),
-                          
-                          // Package Info
-                          Expanded(
-                            child: Column(
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // Price and Book Button Row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  package.name,
+                                  '₹${package.price}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                    fontSize: 20,
                                     color: Colors.black87,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
-                                
-                                // Tests List
-                                ...package.tests.map((test) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 4),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 6,
-                                        height: 6,
-                                        margin: const EdgeInsets.only(top: 6, right: 8),
-                                        decoration: const BoxDecoration(
-                                          color: AppColors.primary,
-                                          shape: BoxShape.circle,
-                                        ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 6,
+                                      height: 6,
+                                      margin: const EdgeInsets.only(right: 6),
+                                      decoration: const BoxDecoration(
+                                        color: AppColors.primary,
+                                        shape: BoxShape.circle,
                                       ),
-                                      Expanded(
-                                        child: Text(
-                                          test,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 14,
-                                          ),
-                                        ),
+                                    ),
+                                    Text(
+                                      package.resultTime,
+                                      style: const TextStyle(
+                                        color: AppColors.primary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                    ],
-                                  ),
-                                )).toList(),
-                                
-                                // Additional Info
-                                if (package.additionalInfo.isNotEmpty) ...[
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 6,
-                                        height: 6,
-                                        margin: const EdgeInsets.only(top: 6, right: 8),
-                                        decoration: const BoxDecoration(
-                                          color: AppColors.primary,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          package.additionalInfo,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                      
-                      const SizedBox(height: 16),
-                      
-                      // Price and Book Button Row
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '₹${package.price}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.black87,
+
+                            ElevatedButton(
+                              onPressed: () =>
+                                  controller.onBookPackage(package),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 8,
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 6,
-                                    height: 6,
-                                    margin: const EdgeInsets.only(right: 6),
-                                    decoration: const BoxDecoration(
-                                      color: AppColors.primary,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  Text(
-                                    package.resultTime,
-                                    style: const TextStyle(
-                                      color: AppColors.primary,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          
-                          ElevatedButton(
-                            onPressed: () => controller.onBookPackage(package),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 8,
+                              child: const Text(
+                                'Book now',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                            child: const Text(
-                              'Book now',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ],
       ),

@@ -6,21 +6,14 @@ class HelpCategory {
   final String icon;
   final List<HelpItem> items;
 
-  HelpCategory({
-    required this.title,
-    required this.icon,
-    required this.items,
-  });
+  HelpCategory({required this.title, required this.icon, required this.items});
 }
 
 class HelpItem {
   final String title;
   final String description;
 
-  HelpItem({
-    required this.title,
-    required this.description,
-  });
+  HelpItem({required this.title, required this.description});
 }
 
 class HelpController extends GetxController {
@@ -110,11 +103,17 @@ class HelpController extends GetxController {
       filteredCategories.assignAll(helpCategories);
     } else {
       filteredCategories.assignAll(
-        helpCategories.where((category) =>
-            category.title.toLowerCase().contains(query.toLowerCase()) ||
-            category.items.any((item) =>
-                item.title.toLowerCase().contains(query.toLowerCase()) ||
-                item.description.toLowerCase().contains(query.toLowerCase()))),
+        helpCategories.where(
+          (category) =>
+              category.title.toLowerCase().contains(query.toLowerCase()) ||
+              category.items.any(
+                (item) =>
+                    item.title.toLowerCase().contains(query.toLowerCase()) ||
+                    item.description.toLowerCase().contains(
+                      query.toLowerCase(),
+                    ),
+              ),
+        ),
       );
     }
   }
